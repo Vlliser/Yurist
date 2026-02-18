@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Эльмар Сулейманов | Адвокат в Баку</title>
     <meta name="description" content="Адвокат Эльмар Сулейманов. Юридические услуги в Баку: гражданское, уголовное, семейное и корпоративное право." />
+    
+    <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS для стилизации -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -27,10 +31,26 @@
         },
       }
     </script>
+
+    <!-- Карта импортов для ESM модулей (React 19) -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+
+    <!-- Babel Standalone: Компилирует TSX прямо в браузере (необходимо для GitHub Pages) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
-      html {
-        scroll-behavior: smooth;
-      }
+      html { scroll-behavior: smooth; }
       .fade-in-on-scroll {
         opacity: 0;
         transform: translateY(20px);
@@ -40,21 +60,22 @@
         opacity: 1;
         transform: translateY(0);
       }
+      @keyframes slide-up {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      .animate-slide-up {
+        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
-  }
-}
-</script>
-</head>
+  </head>
   <body class="bg-white text-gray-900 dark:bg-[#0A0A0A] dark:text-gray-100 transition-colors duration-300 overflow-x-hidden">
     <div id="root"></div>
-    <!-- Основной скрипт входа для инициализации React приложения -->
-    <script type="module" src="./index.tsx"></script>
+
+    <!-- 
+      Важно: используем type="text/babel" и data-type="module".
+      Это заставляет Babel обработать index.tsx и разрешить импорты внутри него.
+    -->
+    <script type="text/babel" data-type="module" data-presets="react,typescript" src="index.tsx"></script>
   </body>
 </html>
