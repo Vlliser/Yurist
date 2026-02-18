@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import * as Icons from './components/Icons';
-import { PRACTICE_AREAS, ACHIEVEMENTS } from './constants';
-import Modal from './components/Modal';
-import { ModalType } from './types';
+import * as Icons from './components/Icons.tsx';
+import { PRACTICE_AREAS, ACHIEVEMENTS } from './constants.tsx';
+import Modal from './components/Modal.tsx';
+import { ModalType } from './types.ts';
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -53,7 +53,8 @@ const App: React.FC = () => {
     setShowCookieBanner(false);
   };
 
-  const IconMap: Record<string, React.FC> = {
+  // Мемоизация карты иконок для оптимизации производительности
+  const IconMap: Record<string, React.FC> = useMemo(() => ({
     scale: Icons.ScaleIcon,
     shield: Icons.ShieldIcon,
     users: Icons.UsersIcon,
@@ -66,7 +67,7 @@ const App: React.FC = () => {
     'user-plus': Icons.UserPlusIcon,
     'edit-3': Icons.Edit3Icon,
     search: Icons.SearchIcon,
-  };
+  }), []);
 
   return (
     <div className="min-h-screen font-sans selection:bg-accent selection:text-white">
