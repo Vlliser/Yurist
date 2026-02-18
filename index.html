@@ -7,75 +7,224 @@
     <title>Эльмар Сулейманов | Адвокат в Баку</title>
     <meta name="description" content="Адвокат Эльмар Сулейманов. Юридические услуги в Баку: гражданское, уголовное, семейное и корпоративное право." />
     
-    <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS для стилизации -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
-            colors: {
-              accent: '#B8972A',
-              premium: '#0A1628',
-            },
-            fontFamily: {
-              serif: ['Playfair Display', 'serif'],
-              sans: ['Inter', 'sans-serif'],
-            },
+            colors: { accent: '#B8972A', premium: '#0A1628' },
+            fontFamily: { serif: ['Playfair Display', 'serif'], sans: ['Inter', 'sans-serif'] },
           },
         },
       }
     </script>
 
-    <!-- Карта импортов для ESM модулей (React 19) -->
-    <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
-
-    <!-- Babel Standalone: Компилирует TSX прямо в браузере (необходимо для GitHub Pages) -->
+    <!-- Подключаем React как глобальные библиотеки -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
       html { scroll-behavior: smooth; }
-      .fade-in-on-scroll {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s ease-out;
-      }
-      .fade-in-on-scroll.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      @keyframes slide-up {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-      }
-      .animate-slide-up {
-        animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      }
+      .fade-in-on-scroll { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+      .fade-in-on-scroll.visible { opacity: 1; transform: translateY(0); }
+      @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      .animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+      .selection-accent::selection { background: #B8972A; color: white; }
     </style>
-  </head>
-  <body class="bg-white text-gray-900 dark:bg-[#0A0A0A] dark:text-gray-100 transition-colors duration-300 overflow-x-hidden">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+</head>
+  <body class="bg-white text-gray-900 dark:bg-[#0A0A0A] dark:text-gray-100 transition-colors duration-300 overflow-x-hidden selection-accent">
     <div id="root"></div>
 
-    <!-- 
-      Важно: используем type="text/babel" и data-type="module".
-      Это заставляет Babel обработать index.tsx и разрешить импорты внутри него.
-    -->
-    <script type="text/babel" data-type="module" data-presets="react,typescript" src="index.tsx"></script>
+    <script type="text/babel">
+      // Используем глобальные переменные вместо импортов
+      const { useState, useEffect, useMemo } = React;
+      const { createRoot } = ReactDOM;
+
+      // --- КОМПОНЕНТЫ ИКОНОК ---
+      const BaseIcon = ({ children }) => (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          {children}
+        </svg>
+      );
+
+      const Icons = {
+        Sun: () => <BaseIcon><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></BaseIcon>,
+        Moon: () => <BaseIcon><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></BaseIcon>,
+        Instagram: () => <BaseIcon><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></BaseIcon>,
+        Facebook: () => <BaseIcon><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></BaseIcon>,
+        Scale: () => <BaseIcon><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h18"/></BaseIcon>,
+        Shield: () => <BaseIcon><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></BaseIcon>,
+        Users: () => <BaseIcon><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></BaseIcon>,
+        Briefcase: () => <BaseIcon><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></BaseIcon>,
+        Building: () => <BaseIcon><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="7"/><line x1="15" y1="22" x2="15" y2="7"/><line x1="12" y1="2" x2="12" y2="5"/></BaseIcon>,
+        Search: () => <BaseIcon><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></BaseIcon>,
+        Edit3: () => <BaseIcon><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></BaseIcon>,
+        ArrowUp: () => <BaseIcon><polyline points="18 15 12 9 6 15"/></BaseIcon>,
+      };
+
+      const PRACTICE_AREAS = [
+        { id: 1, title: 'Гражданское право', description: 'Разрешение споров, защита прав собственности и представительство в судах.', icon: 'Scale' },
+        { id: 2, title: 'Уголовное право', description: 'Защита на всех стадиях уголовного процесса, от следствия до суда.', icon: 'Shield' },
+        { id: 3, title: 'Семейное право', description: 'Расторжение брака, раздел имущества и вопросы опеки над детьми.', icon: 'Users' },
+        { id: 8, title: 'Корпоративное право', description: 'Юридическое сопровождение бизнеса и корпоративных процедур.', icon: 'Building' },
+        { id: 11, title: 'Составление договоров', description: 'Разработка юридически грамотных документов любой сложности.', icon: 'Edit3' },
+        { id: 12, title: 'Экспертиза договоров', description: 'Детальный аудит контрактов на наличие правовых рисков.', icon: 'Search' },
+      ];
+
+      const Modal = ({ isOpen, onClose, title, children }) => {
+        if (!isOpen) return null;
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+            <div className="relative bg-white dark:bg-[#121212] w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col border border-accent/20">
+              <div className="p-6 border-b border-accent/10 flex justify-between items-center">
+                <h3 className="text-xl font-serif text-accent uppercase tracking-widest">{title}</h3>
+                <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+              <div className="p-6 overflow-y-auto text-sm leading-relaxed text-gray-600 dark:text-gray-400">{children}</div>
+            </div>
+          </div>
+        );
+      };
+
+      const App = () => {
+        const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
+        const [isScrolled, setIsScrolled] = useState(false);
+        const [activeModal, setActiveModal] = useState(null);
+
+        useEffect(() => {
+          document.documentElement.classList.toggle('dark', isDarkMode);
+          localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }, [isDarkMode]);
+
+        useEffect(() => {
+          const handleScroll = () => setIsScrolled(window.scrollY > 50);
+          window.addEventListener('scroll', handleScroll);
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+          }, { threshold: 0.1 });
+          document.querySelectorAll('.fade-in-on-scroll').forEach(el => observer.observe(el));
+          
+          return () => {
+            window.removeEventListener('scroll', handleScroll);
+            observer.disconnect();
+          };
+        }, []);
+
+        return (
+          <div className="min-h-screen font-sans">
+            <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 dark:bg-[#050505]/95 backdrop-blur-md py-3 shadow-sm' : 'bg-transparent py-8'}`}>
+              <div className="container mx-auto px-6 flex justify-between items-center">
+                <div className="flex flex-col cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+                  <span className="text-xl md:text-2xl font-serif font-bold text-premium dark:text-white uppercase tracking-tight">Э. Сулейманов</span>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-accent font-semibold">Адвокат · Баку</span>
+                </div>
+                <nav className="hidden md:flex items-center space-x-12 text-xs uppercase tracking-[0.2em] font-bold">
+                  <a href="#practice" className="hover:text-accent transition-colors">Практика</a>
+                  <a href="#about" className="hover:text-accent transition-colors">О себе</a>
+                  <a href="#contacts" className="hover:text-accent transition-colors">Контакты</a>
+                </nav>
+                <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 border border-accent/20 text-premium dark:text-white">
+                  {isDarkMode ? <Icons.Sun /> : <Icons.Moon />}
+                </button>
+              </div>
+            </header>
+
+            <section className="h-screen flex items-center bg-white dark:bg-[#0A0A0A] relative overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#B8972A 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+              <div className="container mx-auto px-6 relative z-10">
+                <div className="max-w-4xl space-y-8 fade-in-on-scroll visible">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-[1px] bg-accent" />
+                    <span className="text-xs uppercase tracking-[0.4em] text-accent font-bold">Личная практика в Азербайджане</span>
+                  </div>
+                  <h1 className="text-6xl md:text-8xl font-serif leading-none text-premium dark:text-white">
+                    Бескомпромиссная <br /><span className="text-accent italic">правовая защита.</span>
+                  </h1>
+                  <p className="text-lg md:text-2xl text-gray-500 dark:text-gray-400 font-light max-w-2xl">
+                    Сочетание фундаментальных знаний закона и стратегического мышления для решения сложнейших задач.
+                  </p>
+                  <div className="pt-6">
+                    <a href="#contacts" className="inline-block bg-accent text-white px-10 py-5 text-sm uppercase tracking-widest font-bold hover:-translate-y-1 transition-transform">Консультация</a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="practice" className="py-32 bg-gray-50 dark:bg-[#080808]">
+              <div className="container mx-auto px-6">
+                <h2 className="text-5xl font-serif text-premium dark:text-white mb-20 fade-in-on-scroll">Сферы практики</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-accent/10 border border-accent/10">
+                  {PRACTICE_AREAS.map(area => {
+                    const Icon = Icons[area.icon];
+                    return (
+                      <div key={area.id} className="group p-12 bg-white dark:bg-[#0D0D0D] hover:bg-gray-50 dark:hover:bg-[#121212] transition-all relative">
+                        <div className="text-accent mb-8"><Icon /></div>
+                        <h3 className="text-lg font-serif mb-4 uppercase tracking-widest text-premium dark:text-white group-hover:text-accent transition-colors">{area.title}</h3>
+                        <p className="text-xs text-gray-400 leading-relaxed font-light">{area.description}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </section>
+
+            <section id="contacts" className="py-32 bg-premium text-white dark:bg-[#050505]">
+              <div className="container mx-auto px-6 grid md:grid-cols-2 gap-20">
+                <div className="space-y-8 fade-in-on-scroll">
+                  <h2 className="text-6xl font-serif">Начать работу</h2>
+                  <p className="text-gray-400 text-lg">Свяжитесь для записи на конфиденциальную встречу в офисе в центре Баку.</p>
+                  <a href="tel:+994556447080" className="block text-4xl md:text-5xl font-serif text-accent hover:underline">+994 55 644 70 80</a>
+                </div>
+                <div className="p-12 bg-white/5 border border-white/10 space-y-6 fade-in-on-scroll">
+                  <h4 className="text-accent uppercase tracking-widest font-bold text-xs">Адрес офиса</h4>
+                  <p className="text-xl font-serif">Проспект Ататюрка 27, AZ 1069, Баку</p>
+                  <div className="flex space-x-6 pt-4">
+                    <a href="https://instagram.com/advokat_elmar_suleymanov/" className="hover:text-accent transition-colors"><Icons.Instagram /></a>
+                    <a href="https://facebook.com/advokatelmar/" className="hover:text-accent transition-colors"><Icons.Facebook /></a>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <footer className="py-10 border-t border-accent/10 dark:bg-[#020202]">
+              <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-400 uppercase tracking-widest">
+                <span>© 2024 Э. СУЛЕЙМАНОВ. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</span>
+                <div className="flex space-x-8 mt-4 md:mt-0">
+                  <button onClick={() => setActiveModal('privacy')} className="hover:text-accent">Приватность</button>
+                  <button onClick={() => setActiveModal('tos')} className="hover:text-accent">Условия</button>
+                </div>
+              </div>
+            </footer>
+
+            <Modal isOpen={!!activeModal} onClose={() => setActiveModal(null)} title="Информация">
+               <p>Юридическая информация и условия предоставления услуг в соответствии с законодательством Азербайджанской Республики.</p>
+            </Modal>
+          </div>
+        );
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
   </body>
 </html>
